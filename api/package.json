@@ -1,0 +1,21 @@
+{
+  "name": "api",
+  "type": "module",
+  "scripts": {
+    "dev": "tsx watch src/index.ts"
+  },
+  "dependencies": {
+    "@hono/node-server": "^1.13.4",
+    "@hono/zod-validator": "^0.4.1",
+    "dotenv": "^16.4.5",
+    "drizzle-orm": "^0.36.0",
+    "hono": "^4.6.8",
+    "postgres": "^3.4.5",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.17",
+    "drizzle-kit": "^0.27.1",
+    "tsx": "^4.19.2"
+  }
+}
