@@ -16,7 +16,7 @@ export async function signout() {
 }
 
 export async function signup(username: string, password: string, email: string) {
-  const res: AxiosResponse<{ data: { success: boolean, token: string } }, any> = await fetchAPI.post("/auth/signup", {
+  const res: AxiosResponse<{ data: { success: boolean, token: string } }, { data: { success: boolean, message: string } }> = await fetchAPI.post("/auth/signup", {
     username,
     email,
     password

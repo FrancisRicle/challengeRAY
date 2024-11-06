@@ -6,6 +6,13 @@ export const db = drizzle(process.env.DATABASE_URL as string);
 export async function createUser(user: { username: string, email: string, password: string, token?: string }) {
   await db.insert(usersTable).values(user)
 }
+export async function userUnique({ username, email }: { username: string, email: string }) {
+  const [result] = await db.select().from(usersTable).where(or(
+    eq(usersTable.username, username),
+    eq(usersTable.email, email)
+  ))
+  return !result
+}
 export async function retrieveToken(user: string, password: string): Promise<{ token: string | null, username: string | null } | null> {
   const [result] = await db.select({ token: usersTable.token, password: usersTable.password, username: usersTable.username }).from(usersTable)
     .where(

@@ -3,7 +3,7 @@ import { Hono } from 'hono'
 import { every } from 'hono/combine'
 import { cors } from 'hono/cors'
 import { sign, decode, type JwtVariables } from 'hono/jwt'
-import { createUser, retrieveToken, destroyToken, getToken, updateToken } from './db/index.js'
+import { createUser, retrieveToken, destroyToken, getToken, updateToken, userUnique } from './db/index.js'
 import { zValidator } from '@hono/zod-validator'
 import { z } from 'zod'
 import { logger } from 'hono/logger'
@@ -114,6 +114,15 @@ auth.post("/signup",
   ),
   async (c) => {
     const { username, password, email } = c.req.valid("json");
+    const checkUnique = await userUnique({ username, email });
+    if (!checkUnique) {
+      return c.json({
+        data: {
+          success: false,
+          message: "username or email alredy in use"
+        }
+      }, { status: 400 })
+    }
     const token = await sign({ username }, "SECRET", "HS256");
     await createUser({ username, password, email, token });
     return c.json({

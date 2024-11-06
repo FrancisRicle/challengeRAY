@@ -1,5 +1,5 @@
 import { Form, Input, Submit } from "components/forms";
-import { Link, redirect } from "react-router-dom";
+import { Link, redirect, useActionData } from "react-router-dom";
 import { object, string, ref } from "yup";
 import { signup } from "../../services/auth";
 
@@ -11,7 +11,9 @@ const userSchema = object({
 }).required();
 
 export function Component() {
+  const error = useActionData();
   return <Form schema={userSchema} method="post">
+    {error && <h3 className="text-red-500 font-bold text-xs">Username or Email alredy in use</h3>}
     <Input label="User Name" name="username" />
     <Input label="Email" name="email" />
     <Input label="Password" name="password" type="password" />
@@ -23,7 +25,6 @@ export function Component() {
 export async function loader() {
   return null;
 }
-
 export async function action({ request }: { request: Request }) {
   try {
     const { username, email, password } = await request.json();
